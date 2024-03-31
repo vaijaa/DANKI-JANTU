@@ -1,0 +1,11 @@
+Perform addition
+calculate factorial
+add 5 numbers stored from memory 0x00001000 of size (a)word (b)halfword  (c) byte
+find sum of n natural numbers
+count number of 1s and 0s in a word (32-bit) and store the results in memory
+find the largest number in array of 5 elements
+
+DATE 22 MARCH 2024
+Find the largest number in the array
+sort the numbers in ascending order
+store the results  of commutative addition on the stack
