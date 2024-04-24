@@ -1,0 +1,22 @@
+module rca(a0,b0,cin,a1,b1,a2,b2,a3,b3,s0,s1,s2,s3,cout);
+    input a0,b0,cin,a1,b1,a2,b2,a3,b3;
+	 output s0,s1,s2,s3,cout;
+	 wire c0,c1,c2;
+	 full_adder sum1(a0,b0,cin,s0,c0);
+	 full_adder sum2(a1,b1,c1,s1,c2);
+	 full_adder sum3(a2,b2,c2,s2,c3);
+	 full_adder sum4(a3,b3,c3,s3,cout);
+endmodule
+
+module full_adder(a,b,cin,sum,cout);
+input a,b,cin;
+output sum,cout;
+wire s1,c1,c2,c3;
+xor xor_s1(s1,a,b);
+xor xor_s2(s,s1,cin);
+and and_c1(c1,a,b);
+and and_c2(c2,a,cin);
+and and_c3(c3,b,cin);
+or or_cout(cout,c1,c2,c3);
+endmodule
+
