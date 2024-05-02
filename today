@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <stdlib.h> // for malloc and free
+
+struct node
+{
+    struct node *left, *right;
+    int key;
+};
+
+struct node *newNode(int item);
+void inorder(struct node *root);
+void postorder(struct node *root);
+void preorder(struct node *root);
+struct node *insert(struct node *node, int key);
+
+int main()
+{
+    struct node *root = NULL;
+
+    root = insert(root, 45);
+    root = insert(root, 32);
+    root = insert(root, 68);
+    root = insert(root, 92);
+    root = insert(root, 14);
+    root = insert(root, 12);
+    root = insert(root, 16);
+    root = insert(root, 40);
+
+    printf("In-order traversal of the given tree: \n");
+    inorder(root);
+    printf("\nPost-order traversal of the given tree: \n");
+    postorder(root);
+    printf("\nPre-order traversal of the given tree: \n");
+    preorder(root);
+    return 0;
+}
+
+// Create a new node
+struct node *newNode(int item)
+{
+    struct node *temp = (struct node *)malloc(sizeof(struct node));
+    temp->key = item;
+    temp->left = temp->right = NULL;
+    return temp;
+}
+
+// Perform in-order traversal
+void inorder(struct node *root)
+{
+    if (root != NULL)
+    {
+        inorder(root->left);
+        printf("%d\t", root->key);
+        inorder(root->right);
+    }
+}
+void postorder(struct node *root)
+{
+    if (root != NULL)
+    {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d\t", root->key);
+    }
+}
+void preorder(struct node *root) // Changed function name
+{
+    if (root != NULL)
+    {
+        printf("%d\t", root->key); // Changed position of print statement
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+// Insert a node into the BST
+struct node *insert(struct node *node, int key)
+{
+    if (node == NULL)
+        return newNode(key);
+
+    if (key < node->key)
+        node->left = insert(node->left, key);
+    else if (key > node->key)
+        node->right = insert(node->right, key);
+
+    return node;
+}
+
+
+struct node *deletenode(struct node *root,int key)
+{
+  if(root==NULL)
+    {
+        return root;
+    }
+    if(key <root->data)
+    {
+        root->left = deletenode(root->left,key);
+    }
+    else if(key > root->data)
+    {
+        root->right = deletenode(root->right,key);
+    }
+    else
+    {
+        if(root->left == NULL)
+        {
+            struct node *temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if(root->right==NULL)
+        {
+           struct node *temp = root->left;
+           free(root);
+           return temp;
+        }
+    }
+    return root;
+}
