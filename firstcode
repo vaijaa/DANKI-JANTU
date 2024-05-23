@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <windows.h>
+
+struct Employee {
+    char name[50];
+    float salary;
+    int age;
+    int id;
+};
+
+void gotoxy(int x, int y) {
+    COORD cord = { x, y };
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cord);
+}
+
+void addRecord(FILE *fp) {
+    fseek(fp, 0, SEEK_END);
+    struct Employee e;
+    char another = 'y';
+
+    while (another == 'y') {
+        printf("\nEnter Name: ");
+        scanf("%s", e.name);
+        printf("Enter Age: ");
+        scanf("%d", &e.age);
+        printf("Enter Salary: ");
+        scanf("%f", &e.salary);
+        printf("Enter EMP-ID: ");
+        scanf("%d", &e.id);
+
+        fwrite(&e, sizeof(e), 1, fp);
+
+        printf("\nWant to add another record (Y/N): ");
+        fflush(stdin);
+        scanf(" %c", &another);
+    }
+}
+
+void deleteRecord(FILE *fp) {
+    char empname[50];
+    char another = 'y';
+
+    while (another == 'y') {
+        printf("\nEnter employee name to delete: ");
+        scanf("%s", empname);
+
+        FILE *ft = fopen("temp.txt", "wb");
+        rewind(fp);
+
+        struct Employee e;
+        while (fread(&e, sizeof(e), 1, fp) == 1) {
+            if (strcmp(e.name, empname) != 0) {
+                fwrite(&e, sizeof(e), 1, ft);
+            }
+        }
+
+        fclose(fp);
+        fclose(ft);
+        remove("data.txt");
+        rename("temp.txt", "data.txt");
+
+        printf("\nRecord deleted successfully!");
+        printf("\nWant to delete another record (Y/N): ");
+        fflush(stdin);
+        scanf(" %c", &another);
+    }
+}
+
+int main() {
+    FILE *fp = fopen("data.txt", "ab+");
+    if (fp == NULL) {
+        printf("Error opening file!");
+        return 1;
+    }
+
+    int choice;
+    do {
+        printf("\nEmployee Record System");
+        printf("\n1. Add a new record");
+        printf("\n2. Delete a record");
+        printf("\n3. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addRecord(fp);
+                break;
+            case 2:
+                deleteRecord(fp);
+                break;
+            case 3:
+                printf("\nExiting the program. Goodbye!");
+                break;
+            default:
+                printf("\nInvalid choice. Please try again.");
+        }
+    } while (choice != 3);
+
+    fclose(fp);
+    return 0;
+}
