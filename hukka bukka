@@ -1,0 +1,53 @@
+module traffic_sim(clk,grt,ryg);
+input clk;
+output reg [3:0]grt;
+output reg [7:0]ryg;
+reg [22:0]clkdiv=23'd0;
+reg clkkey;
+parameter [3:0]state1=0,state2=0,state3=2,state4=3;
+reg [3:0]PS,NS;
+
+always@(posedge clk)
+begin 
+clkdiv=clkdiv+1;
+clkkey=clkdiv[22];
+end
+always@(posedge clk)
+begin 
+case(PS)
+state1:begin
+       grt=4'b0000;
+		 ryg=8'b11001100;
+		 NS=state2;
+		 end
+
+state2:begin
+       grt=4'b0101;
+		 ryg=8'b11000011;
+		 NS=state3;
+		 end
+
+state3:begin
+       grt=4'b1010;
+		 ryg=8'b00111100;
+		 NS=state4;
+		 end
+
+state3:begin
+       grt=4'b0000;
+		 ryg=8'b00110011;
+		 NS=state1;
+		 end
+default:begin 
+        grt=4'b0000;
+		  ryg=8'b00000000;
+		  NS=state1;
+		  end
+	endcase
+end
+
+always@(posedge clkkey)
+begin
+PS=NS;
+end
+endmodule
